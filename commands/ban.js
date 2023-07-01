@@ -3,7 +3,7 @@ const d = require('discord.js');
 const c = require('../config');
 
 module.exports = {
-    name: "kick",
+    name: "ban",
     run: async function(message, bot) {
         try {
             member = message.mentions.members.first()
