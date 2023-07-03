@@ -50,8 +50,14 @@ const register = (async function(bot=c) {
                     reason: `Bot created ticket; ${interaction.member.user.id}`,
                     type: ChannelType.PrivateThread
                 });
+                var components = new ActionRowBuilder({
+                    components: [
+                        new ButtonBuilder({ label: "Close", style: ButtonStyle.Secondary, emoji: "🔒", custom_id: `close-ticket-${threadId}` }),
+                        new ButtonBuilder({ label: "Close With Reason", style: ButtonStyle.Secondary, emoji: "🔒", custom_id: `close-with-reason-ticket-${threadId}` })
+                    ]
+                })
                 await thread.members.add(interaction.member.user.id);
-                await thread.send({content: "Please wait for a staff member to help you, until then you can address what your having an issue with.", components: []});
+                await thread.send({content: "Please wait for a staff member to help you, until then you can address what your having an issue with.", components: [components]});
                 await sendNewTicketRoomPanel(interaction.member.user.id);
                 return await interaction.reply({content: "Created a private thread.", ephemeral: true});
             }
