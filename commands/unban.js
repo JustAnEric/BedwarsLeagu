@@ -3,24 +3,24 @@ const d = require('discord.js');
 const c = require('../config');
 
 module.exports = {
-    name: "ban",
+    name: "unban",
     run: async function(message, bot) {
         try {
-            member = message.mentions.members.first()
-            reason = message.content.split('> ')[1];
+            member = message.mentions.users.first()
+            target = message.content.split(' <@')[1].split('>')[0];
         } catch(e) {
             return message.channel.send("You need to include a member.")
         }
         if (await c.check_member_permissions(message.member, message.channel, bot, PermissionsBitField.Flags.BanMembers) == true || message.author.id == "880433376148979732") {
-            member.ban({reason: `Requested from ${member}; REASON: [ ${reason} ]`}).catch((e) => {
+            message.guild.members.unban(target).catch((e) => {
                 console.log(e)
-                return message.channel.send({ content: "Sorry, **this user is a mod or admin, I can't do that.**" })
+                return message.channel.send({ content: "For some reason, I had an error that a developer needs to fix. Please contact staff team." })
             });
-            return message.channel.send({ content: `Banned ${member} successfully.` });
+            return message.channel.send({ content: `Unbanned ${target} successfully.` });
         } else {
             return message.channel.send({ content: "You do not have the minimum authority to execute this command." })
         }
     }, 
     staff_only: true,
-    description: "Bans a member from the server."
+    description: "Unbans a member from the server."
 }

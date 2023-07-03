@@ -1,4 +1,4 @@
-const { GuildMember } = require("discord.js")
+const { GuildMember } = require("discord.js");
 
 module.exports = {
     prefix: "?",
@@ -16,5 +16,11 @@ module.exports = {
         } else {
             return false;
         }
-    }
+    },
+    welcomeChannel: "1121160959440998510",
+    get_channel: async (client, channel_id) => {
+        return await client.channels.cache.get(channel_id);
+    },
+    welcomeRole: "1121155852821340202",
+    leaveChannel: "1124603704885137448"
 }

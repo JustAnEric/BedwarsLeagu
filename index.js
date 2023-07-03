@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 const Discord = require('discord.js');
 const fs = require('fs');
 const config = require('./config');
@@ -12,6 +14,9 @@ bot = new Client({
         Discord.GatewayIntentBits.GuildInvites,
         Discord.GatewayIntentBits.GuildMessages,
         Discord.GatewayIntentBits.GuildMessageTyping,
+        Discord.GatewayIntentBits.DirectMessageReactions,
+        Discord.GatewayIntentBits.GuildMessageReactions,
+        Discord.GatewayIntentBits.GuildPresences
     ], partials: [
         Discord.Partials.Message,
         Discord.Partials.Reaction,
@@ -30,7 +35,10 @@ fs.exists('./commands', function(exists) {
             bot.commands.push({
                 cmodule: cmod,
                 cname: cmod.name,
-                run: cmod.run
+                run: cmod.run,
+                staff_only: cmod.staff_only,
+                desc: cmod.description,
+                hidden: cmod.hidden
             });
             console.log(`[✅] Registered command '${cmod.name}'`);
         });
@@ -60,7 +68,39 @@ bot.on('messageCreate', async (message) => {
             //console.log(e)
         }
     });
-    if (!invoked==1) return message.channel.send("Command not found.");
+    if (!invoked==1 && !message.content.slice(1) == null) return message.channel.send("Command not found.");
+});
+
+bot.on('guildMemberAdd', async (member) => {
+    var welcomeChannel = await config.get_channel(bot, config.welcomeChannel);
+    var role = member.guild.roles.cache.find(r => r.id === config.welcomeRole);
+    var welcome = new EmbedBuilder().setDescription(`Hey <@${member.user.id}>, welcome to **${member.guild.name}**!\nMake sure you verify in <#1124617320816451615>!`)/*.setTitle(`👋 Welcome ${member.user.username}!`)*/.setColor(0x000000);
+    //var welcome = `Hey <@${member.user.id}>, welcome to **${member.guild.name}**!`;
+    console.log("added role and sent message");
+    console.log(member)
+    return welcomeChannel.send({embeds:[welcome]});
+});
+
+bot.on('guildMemberRemove', async (member) => {
+    var leaveChannel = await config.get_channel(bot, config.leaveChannel);
+    var bye = new EmbedBuilder().setDescription(`**${member.user.tag}** left the server.`)/*.setTitle(`👋 Welcome ${member.user.username}!`)*/.setColor(0x000000);
+    console.log("LEFT)SERVER")
+    //return await leaveChannel.send(`**${member.user.tag}** left the server.`);
+    return await leaveChannel.send({embeds:[bye]});
+});
+
+bot.on('messageReactionAdd', async (r,u) => {
+    if (!r.emoji == "✅") return false;
+    var role2 = await bot.guilds.cache.get(r.message.guildId);
+    console.log(role2)
+    var role = role2.roles.cache.find(r => r.id === config.welcomeRole);
+    var invoker = role2.members.cache.find(r => r.id === u.id)
+    console.log("Verifying member...");
+    u.send("You have been successfully verified!").catch((e) => {
+        console.log("error sending welcome message")
+    });
+    invoker.roles.add(role);
+    console.log(u)
 });
 
 bot.login("MTEyMjUwMjgwMzY0NzExNTMwNQ.GNm1g1.NSqs26n2hxv5AcWX1g3HIX2gAuhlyxrXCeSUO0").then(() => {
