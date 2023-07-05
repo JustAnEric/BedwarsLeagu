@@ -28,7 +28,7 @@ const sendNewTicketRoomPanel = (async function(openedby) {
 });
 
 const sendNewClosedTicketPanel = (async function(threadId, closedby) {
-    
+
     const embed = new EmbedBuilder({
         title: "Ticket Closed",
         timestamp: Date.now(),
@@ -37,7 +37,7 @@ const sendNewClosedTicketPanel = (async function(threadId, closedby) {
     var getThread = await bot.channels.cache.get('1121143470187356210') || await bot.channels.fetch('1121143470187356210');
     const components = new ActionRowBuilder().addComponents(new ButtonBuilder({ label: "View Thread", url: `${getThread.url}`, style: ButtonStyle.Link }));
     var t = await getThread.threads.cache.get(threadId).messages.fetch({ limit: 1, cache: true });
-    var getReference = t.content.split("Reference: ")[1];
+    var getReference = t.embeds[0].description.split("Reference: ")[1];
     var getChannel = await bot.channels.cache.get(getReference.split('/')[3]) || await bot.channels.fetch(getReference.split('/')[3])/*getReference.split('/')[3]*/;
     var getMessage = await getChannel.messages.cache.get(getReference.split('/')[4]) || await getChannel.messages.fetch(getReference.split('/')[4]);
 
