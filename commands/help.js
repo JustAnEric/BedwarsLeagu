@@ -5,7 +5,7 @@ module.exports = {
     name: "help",
     run: async function(message, bot) {
         commands = "";
-        embed = new EmbedBuilder().setTitle("All of these `commands`").setColor(0x000000).setTimestamp(Date.now());
+        embed = new EmbedBuilder().setTitle("Commands").setColor(0x000000).setTimestamp(Date.now());
         embed.setFooter({text:"System"});
         for (const i of bot.commands) {
             if (i['hidden']) {}

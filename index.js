@@ -48,6 +48,23 @@ fs.exists('./commands', function(exists) {
     console.log(`[✅] Finished registering commands`);
 });
 
+fs.exists('./extras', async function(exists) {
+    async function callback(err, files) {
+        if (err) return false;
+        files.forEach(async element => {
+            if (!element.endsWith('.js')) { /* ignore */ }
+            else {
+                cmod = require(`./extras/${element.split(".js")[0]}`);
+                await cmod.main(bot);
+                console.log(`[✅] Registered extra '${element.split(".js")[0]}'`);
+            }
+        });
+    }
+    if (exists) console.log("Whoops, your extras directory does not exist.")
+    await fs.readdir('./extras', callback)
+    console.log(`[✅] Finished registering extras`);
+});
+
 bot.on('messageCreate', async (message) => {
     if (!message.content.startsWith(config.prefix)) return false;
     console.log("hi")

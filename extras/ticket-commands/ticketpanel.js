@@ -3,7 +3,7 @@ const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('
 module.exports = {
     name: "ticpaneladminonly",
     run: async function(message, bot) {
-        var row = new ActionRowBuilder().addComponents(new ButtonBuilder({style: ButtonStyle.Primary, emoji: "📩", custom_id: "ticket-create-button"}));
+        var row = new ActionRowBuilder().addComponents(new ButtonBuilder({style: ButtonStyle.Primary, emoji: "📩", custom_id: "ticket-create-button", label: "Create Ticket"}));
         var embed = new EmbedBuilder().setDescription(`If you are facing any issues or have any questions, please create a ticket!`).setTitle("Bedwars League Support").setColor(0x000000);
         var msg = await message.channel.send({embeds: [embed], components: [row]});
         console.log(msg)
