@@ -120,6 +120,6 @@ bot.on('messageReactionAdd', async (r,u) => {
     console.log(u)
 });
 
-bot.login("MTEyMjUwMjgwMzY0NzExNTMwNQ.GNm1g1.NSqs26n2hxv5AcWX1g3HIX2gAuhlyxrXCeSUO0").then(() => {
+bot.login("token_completely_gone_for_security").then(() => {
     console.log(bot.user.id)
 });
